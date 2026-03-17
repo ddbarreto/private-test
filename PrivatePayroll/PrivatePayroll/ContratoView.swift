@@ -40,6 +40,7 @@ struct ContratoView: View {
                         .foregroundStyle(NuDS.Color.contentDefault)
                 }
                 .tint(NuDS.Color.accentPrimary)
+                .animation(AppAnimations.spring, value: aceiteTermos)
                 .padding(.top, NuDS.Spacing.md)
 
                 Button(action: {
@@ -54,10 +55,12 @@ struct ContratoView: View {
                 .background(aceiteTermos ? NuDS.Color.accentPrimary : NuDS.Color.surfaceSubtle, in: RoundedRectangle(cornerRadius: NuDS.Radius.card))
                 .foregroundStyle(aceiteTermos ? NuDS.Color.contentOnColor : NuDS.Color.contentSecondary)
                 .disabled(!aceiteTermos)
+                .buttonStyle(ScaleButtonStyle())
                 .padding(.top, NuDS.Spacing.md)
             }
             .padding(NuDS.Spacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .screenEnter()
         }
         .background(NuDS.Color.backgroundSecondary)
         .navigationTitle("Contrato")

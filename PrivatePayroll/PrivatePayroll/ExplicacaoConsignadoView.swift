@@ -47,6 +47,7 @@ struct ExplicacaoConsignadoView: View {
             }
             .padding(NuDS.Spacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .screenEnter()
         }
         .background(NuDS.Color.backgroundSecondary)
         .navigationTitle("Consignado privado")

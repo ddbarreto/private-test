@@ -2,151 +2,227 @@
 //  VisaoGeralTabView.swift
 //  Private Payroll
 //
-//  Aba 1: Visão geral — conta, cartão de crédito, etc.
+//  Home screen no estilo NuDS: header roxo, Conta, ações, Meus cartões, empréstimo, Cartão de crédito, barra inferior.
 //
 
 import SwiftUI
 
 struct VisaoGeralTabView: View {
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                topBarSection
-                contaSection
-                cartaoSection
-                quickActionsSection
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(spacing: 0) {
+                    headerRoxoSection
+                    contaSection
+                    quickActionsSection
+                    meusCartoesSection
+                    emprestimoCardSection
+                    cartaoCreditoSection
+                    Color.clear.frame(height: 88)
+                }
+                .padding(.bottom, 24)
+                .fadeInUp()
             }
-            .padding(.bottom, 32)
+            .background(NuDS.Color.backgroundSecondary)
+            .ignoresSafeArea(edges: .top)
+
+            bottomBarSection
         }
-        .background(VisaoGeralStyle.background)
-        .ignoresSafeArea(edges: .top)
     }
 
-    private var topBarSection: some View {
-        HStack {
-            Text("Olá, Maria")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(VisaoGeralStyle.textPrimary)
-            Spacer()
-            Button { } label: {
-                ZStack {
-                    Circle()
-                        .fill(VisaoGeralStyle.surface)
-                        .frame(width: 40, height: 40)
-                    Image(systemName: "gearshape.fill")
-                        .font(.system(size: 18))
-                        .foregroundStyle(NuDS.Color.accentPrimary)
+    // MARK: - Header roxo (NuDS TopBar / background.accent.primary)
+    private var headerRoxoSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: NuDS.Spacing.s2) {
+                    ZStack {
+                        Circle()
+                            .fill(NuDS.Color.contentOnColor.opacity(0.3))
+                            .frame(width: 48, height: 48)
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 22))
+                            .foregroundStyle(NuDS.Color.contentOnColor)
+                    }
+                    NuDSText(text: "Olá, Maria", variant: .subtitleMediumStrong, tone: .inverse)
+                }
+                Spacer()
+                HStack(spacing: NuDS.Spacing.s2) {
+                    Button { } label: {
+                        Image(systemName: "eye")
+                            .font(.system(size: 20))
+                            .foregroundStyle(NuDS.Color.contentOnColor)
+                    }
+                    Button { } label: {
+                        Image(systemName: "questionmark.circle")
+                            .font(.system(size: 20))
+                            .foregroundStyle(NuDS.Color.contentOnColor)
+                    }
+                    Button { } label: {
+                        Image(systemName: "envelope.badge")
+                            .font(.system(size: 20))
+                            .foregroundStyle(NuDS.Color.contentOnColor)
+                    }
                 }
             }
+            .padding(.horizontal, NuDS.Spacing.s6)
+            .padding(.top, NuDS.Spacing.s3)
+            .padding(.bottom, NuDS.Spacing.s6)
         }
-        .padding(.horizontal, NuDS.Spacing.lg)
-        .padding(.top, 12)
-        .padding(.bottom, 20)
-        .background(VisaoGeralStyle.surface)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(NuDS.Color.accentPrimary)
     }
 
+    // MARK: - Conta (NuDS ListRow-style: título + saldo + chevron)
     private var contaSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: NuDS.Spacing.s3) {
             HStack {
-                Text("Conta")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(VisaoGeralStyle.textPrimary)
+                NuDSText(text: "Conta", variant: .labelSmallStrong, tone: .primary)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 14))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(NuDS.Color.contentSecondary)
             }
-            Text("R$ 1.356,98")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundStyle(VisaoGeralStyle.textPrimary)
-            Text("Saldo disponível")
-                .font(.system(size: 13))
-                .foregroundStyle(NuDS.Color.contentSecondary)
+            NuDSText(text: "R$ 1.356,98", variant: .titleSmall, tone: .primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(NuDS.Spacing.lg)
-        .background(VisaoGeralStyle.surface)
-        .padding(.horizontal, NuDS.Spacing.lg)
-        .padding(.top, 8)
-        .padding(.bottom, 16)
+        .padding(NuDS.Spacing.s5)
+        .background(NuDS.Color.surfaceDefault)
     }
 
-    private var cartaoSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Cartão de crédito")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(VisaoGeralStyle.textPrimary)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14))
-                    .foregroundStyle(NuDS.Color.contentSecondary)
-            }
-            Text("Fatura atual")
-                .font(.system(size: 13))
-                .foregroundStyle(NuDS.Color.contentSecondary)
-            Text("R$ 1.094,80")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(VisaoGeralStyle.textPrimary)
-            Text("Limite disponível: R$ 730,00")
-                .font(.system(size: 13))
-                .foregroundStyle(NuDS.Color.contentSecondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(NuDS.Spacing.lg)
-        .background(VisaoGeralStyle.surface, in: RoundedRectangle(cornerRadius: 16))
-        .padding(.horizontal, NuDS.Spacing.lg)
-        .padding(.bottom, 24)
-    }
-
+    // MARK: - Ações rápidas (NuDS spacing + typography)
     private var quickActionsSection: some View {
-        HStack(spacing: NuDS.Spacing.lg) {
-            quickAction(icon: "dollarsign.circle", label: "Pix")
-            quickAction(icon: "arrow.up.arrow.down", label: "Transferir")
-            quickAction(icon: "creditcard", label: "Cartões")
-            quickAction(icon: "qrcode", label: "Pagar")
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: NuDS.Spacing.s6) {
+                quickActionCircle(icon: "bolt.fill", label: "Pix")
+                quickActionCircle(icon: "arrow.up.arrow.down", label: "Transferir")
+                quickActionCircle(icon: "banknote", label: "Pegar empréstimo")
+                quickActionCircle(icon: "barcode.viewfinder", label: "Pagar")
+            }
+            .padding(.horizontal, NuDS.Spacing.s6)
         }
-        .padding(.horizontal, NuDS.Spacing.lg)
-        .padding(.vertical, 20)
-        .background(VisaoGeralStyle.surface)
+        .padding(.vertical, NuDS.Spacing.s4)
+        .background(NuDS.Color.surfaceDefault)
     }
 
-    private func quickAction(icon: String, label: String) -> some View {
-        VStack(spacing: 8) {
+    private func quickActionCircle(icon: String, label: String) -> some View {
+        VStack(spacing: NuDS.Spacing.s3) {
             ZStack {
                 Circle()
-                    .fill(VisaoGeralStyle.surfaceSubtle)
-                    .frame(width: 56, height: 56)
+                    .fill(NuDS.Color.surfaceSubtle)
+                    .frame(width: 72, height: 72)
                 Image(systemName: icon)
-                    .font(.system(size: 22))
-                    .foregroundStyle(NuDS.Color.accentPrimary)
+                    .font(.system(size: 24))
+                    .foregroundStyle(NuDS.Color.contentDefault)
             }
-            Text(label)
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(VisaoGeralStyle.textPrimary)
+            NuDSText(text: label, variant: .labelSmallStrong, tone: .primary, lineLimit: 1)
+                .multilineTextAlignment(.center)
+                .frame(width: 80)
         }
-        .frame(maxWidth: .infinity)
+        .frame(width: 80)
     }
-}
 
-private enum VisaoGeralStyle {
-    static let background = SwiftUI.Color(hex: "F5F5F7")
-    static let surface = SwiftUI.Color.white
-    static let surfaceSubtle = SwiftUI.Color(hex: "F0F0F2")
-    static let textPrimary = SwiftUI.Color(hex: "000000")
-}
-
-private extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r, g, b: UInt64
-        switch hex.count {
-        case 6: (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        default: (r, g, b) = (0, 0, 0)
+    // MARK: - Meus cartões (NuDS ListRow com leading ícone)
+    private var meusCartoesSection: some View {
+        VStack(spacing: 0) {
+            NuDSListRow(
+                label: "Meus cartões",
+                leading: {
+                    AnyView(
+                        Image(systemName: "creditcard.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(NuDS.Color.contentDefault)
+                    )
+                },
+                showChevron: true,
+                onPress: { }
+            )
         }
-        self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
+        .padding(.horizontal, NuDS.Spacing.s6)
+        .padding(.top, NuDS.Spacing.s2)
+        .padding(.bottom, NuDS.Spacing.s4)
+        .background(NuDS.Color.surfaceDefault)
+    }
+
+    // MARK: - Card empréstimo (NuDS CalloutBox-style: surface.subtle, radius.lg)
+    private var emprestimoCardSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            NuDSText(
+                text: "Você tem R$ 12.300,00 disponíveis para empréstimo.",
+                variant: .paragraphSmallStrong,
+                tone: .primary
+            )
+            .padding(NuDS.Spacing.s6)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(NuDS.Color.surfaceSubtle, in: RoundedRectangle(cornerRadius: NuDS.Radius.lg))
+        .padding(.horizontal, NuDS.Spacing.s6)
+        .padding(.bottom, NuDS.Spacing.s6)
+        .background(NuDS.Color.surfaceDefault)
+    }
+
+    // MARK: - Cartão de crédito (NuDS SectionTitle + typography)
+    private var cartaoCreditoSection: some View {
+        VStack(alignment: .leading, spacing: NuDS.Spacing.s3) {
+            NuDSSectionTitle(
+                title: "Cartão de crédito",
+                trailing: {
+                    AnyView(
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(NuDS.Color.contentSecondary)
+                    )
+                },
+                onTrailingPress: { }
+            )
+            VStack(alignment: .leading, spacing: NuDS.Spacing.s1) {
+                NuDSText(text: "Fatura atual", variant: .labelXSmallDefault, tone: .secondary)
+                NuDSText(text: "R$ 1.094,80", variant: .titleXSmall, tone: .primary)
+                NuDSText(text: "Limite disponível: R$ 730,00", variant: .labelXSmallDefault, tone: .secondary)
+            }
+            .padding(.horizontal, NuDS.Spacing.s5)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, NuDS.Spacing.s5)
+        .background(NuDS.Color.surfaceDefault)
+    }
+
+    // MARK: - Barra inferior (NuDS BottomBar-style: radius.xl, surface.default)
+    private var bottomBarSection: some View {
+        HStack(spacing: 0) {
+            Image(systemName: "gift")
+                .font(.system(size: 22))
+                .foregroundStyle(NuDS.Color.contentDefault)
+            Spacer()
+            ZStack {
+                Circle()
+                    .fill(NuDS.Color.accentPrimary)
+                    .frame(width: 56, height: 56)
+                    .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
+                Image(systemName: "arrow.up.arrow.down")
+                    .font(.system(size: 22, weight: .medium))
+                    .foregroundStyle(NuDS.Color.contentOnColor)
+            }
+            Spacer()
+            HStack(spacing: NuDS.Spacing.s5) {
+                Image(systemName: "dollarsign.circle")
+                    .font(.system(size: 22))
+                    .foregroundStyle(NuDS.Color.contentDefault)
+                Image(systemName: "bag")
+                    .font(.system(size: 22))
+                    .foregroundStyle(NuDS.Color.contentDefault)
+            }
+            NuDSText(text: "R$ 83,27", variant: .labelSmallStrong, tone: .primary)
+                .padding(.leading, NuDS.Spacing.s2)
+        }
+        .padding(.horizontal, NuDS.Spacing.s6)
+        .padding(.vertical, NuDS.Spacing.s4)
+        .background(
+            NuDS.Color.surfaceDefault.opacity(0.96),
+            in: RoundedRectangle(cornerRadius: NuDS.Radius.xl)
+        )
+        .padding(.horizontal, NuDS.Spacing.s4)
+        .padding(.bottom, NuDS.Spacing.s6)
+        .shadow(color: .black.opacity(0.08), radius: 16, x: 0, y: -4)
     }
 }
 

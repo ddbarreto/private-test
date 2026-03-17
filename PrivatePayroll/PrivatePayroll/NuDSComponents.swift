@@ -2,54 +2,204 @@
 //  NuDSComponents.swift
 //  Private Payroll
 //
-//  Componentes no estilo NuDS (design system) para experiência de repositório.
+//  Componentes NuDS — espelho dos componentes do nuds-library (ListRow, SectionTitle, NText, Box).
 //
 
 import SwiftUI
 
-private extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
-        switch hex.count {
-        case 3: (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default: (a, r, g, b) = (255, 0, 0, 0)
-        }
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue: Double(b) / 255,
-            opacity: Double(a) / 255
-        )
+// MARK: - NuDS (tokens para uso nas views; espelho nuds-library)
+enum NuDS {
+    enum Color {
+        static let accentPrimary = NuDSSemantic.Surface.accentPrimary
+        static let accentPrimarySubtle = NuDSSemantic.Surface.accentPrimarySubtle
+        static let surfaceDefault = NuDSSemantic.Surface.default
+        static let surfaceSubtle = NuDSSemantic.Surface.subtle
+        static let surfaceSubtleOnSubtle = NuDSSemantic.Surface.subtleOnSubtle
+        static let backgroundDefault = NuDSSemantic.Background.default
+        static let backgroundSubtle = NuDSSemantic.Background.subtle
+        static let backgroundSecondary = NuDSSemantic.Background.subtle
+        static let contentDefault = NuDSSemantic.Content.default
+        static let contentSecondary = NuDSSemantic.Content.subtle
+        static let contentOnColor = NuDSSemantic.Content.onColor
+        static let contentDisabled = NuDSSemantic.Content.disabled
+        static let borderDefault = NuDSSemantic.Border.default
+        static let feedbackSuccess = NuDSSemantic.Feedback.success
+    }
+    enum Spacing {
+        static let s0 = NuDSSpacing.s0
+        static let s1 = NuDSSpacing.s1
+        static let s2 = NuDSSpacing.s2
+        static let s3 = NuDSSpacing.s3
+        static let s4 = NuDSSpacing.s4
+        static let s5 = NuDSSpacing.s5
+        static let s6 = NuDSSpacing.s6
+        static let xs = NuDSSpacing.s1
+        static let sm = NuDSSpacing.s2
+        static let md = NuDSSpacing.s4
+        static let lg = NuDSSpacing.s6
+    }
+    enum Radius {
+        static let sm = NuDSRadius.sm
+        static let md = NuDSRadius.md
+        static let lg = NuDSRadius.lg
+        static let xl = NuDSRadius.xl
+        static let full = NuDSRadius.full
+        static let pill = NuDSRadius.full
+        static let card = NuDSRadius.lg
     }
 }
 
-// MARK: - Tokens NuDS (alinhado ao Figma / nuds-library)
-enum NuDS {
-    enum Color {
-        static let accentPrimary = SwiftUI.Color(hex: "820AD1")
-        static let accentPrimarySubtle = SwiftUI.Color(hex: "F6ECFF")
-        static let surfaceDefault = SwiftUI.Color.white
-        static let surfaceSubtle = SwiftUI.Color(hex: "EFEFEF")
-        static let backgroundSecondary = SwiftUI.Color(hex: "F0F1F5")
-        static let contentDefault = SwiftUI.Color(hex: "000000")
-        static let contentSecondary = SwiftUI.Color(hex: "727683")
-        static let contentOnColor = SwiftUI.Color.white
+// MARK: - NuDSText (espelho NText — variant + tone)
+enum NuDSTextVariant {
+    case titleXSmall, titleSmall
+    case subtitleMediumDefault, subtitleMediumStrong
+    case subtitleSmallDefault, subtitleSmallStrong
+    case paragraphMediumDefault, paragraphMediumStrong
+    case paragraphSmallDefault, paragraphSmallStrong
+    case labelMediumDefault, labelMediumStrong
+    case labelSmallDefault, labelSmallStrong
+    case labelXSmallDefault, labelXSmallStrong
+}
+
+enum NuDSTextTone {
+    case primary   // content.default
+    case secondary // content.subtle
+    case inverse   // content.onColor
+    case accent   // content.accentPrimary
+    case positive  // feedback.success
+}
+
+struct NuDSText: View {
+    let text: String
+    var variant: NuDSTextVariant = .paragraphMediumDefault
+    var tone: NuDSTextTone = .primary
+    var lineLimit: Int?
+
+    private var fontSize: CGFloat {
+        switch variant {
+        case .titleXSmall: return 20
+        case .titleSmall: return 24
+        case .subtitleMediumDefault, .subtitleMediumStrong: return 18
+        case .subtitleSmallDefault, .subtitleSmallStrong: return 16
+        case .paragraphMediumDefault, .paragraphMediumStrong, .labelMediumDefault, .labelMediumStrong: return 16
+        case .paragraphSmallDefault, .paragraphSmallStrong, .labelSmallDefault, .labelSmallStrong: return 14
+        case .labelXSmallDefault, .labelXSmallStrong: return 12
+        }
     }
-    enum Spacing {
-        static let xs: CGFloat = 4
-        static let sm: CGFloat = 8
-        static let md: CGFloat = 16
-        static let lg: CGFloat = 24
+
+    private var fontWeight: Font.Weight {
+        switch variant {
+        case .titleXSmall, .titleSmall: return .medium
+        case .subtitleMediumStrong, .subtitleSmallStrong, .paragraphMediumStrong, .paragraphSmallStrong,
+             .labelMediumStrong, .labelSmallStrong, .labelXSmallStrong: return .semibold
+        default: return .regular
+        }
     }
-    enum Radius {
-        static let pill: CGFloat = 100
-        static let card: CGFloat = 12
+
+    private var color: Color {
+        switch tone {
+        case .primary: return NuDS.Color.contentDefault
+        case .secondary: return NuDS.Color.contentSecondary
+        case .inverse: return NuDS.Color.contentOnColor
+        case .accent: return NuDS.Color.accentPrimary
+        case .positive: return NuDS.Color.feedbackSuccess
+        }
+    }
+
+    var body: some View {
+        Text(text)
+            .font(.system(size: fontSize, weight: fontWeight))
+            .foregroundStyle(color)
+            .lineLimit(lineLimit)
+    }
+}
+
+// MARK: - NuDSListRow (espelho ListRow — leading 20pt, label, description, secondaryLabel, showChevron)
+struct NuDSListRow: View {
+    var label: String
+    var description: String? = nil
+    var secondaryLabel: String? = nil
+    var leading: (() -> AnyView)? = nil
+    var showChevron: Bool = true
+    var onPress: (() -> Void)? = nil
+
+    var body: some View {
+        Button(action: { onPress?() }) {
+            HStack(alignment: .center, spacing: NuDS.Spacing.s3) {
+                if let leading = leading {
+                    leading()
+                        .frame(width: 20, height: 20, alignment: .center)
+                }
+                VStack(alignment: .leading, spacing: NuDS.Spacing.s1) {
+                    NuDSText(text: label, variant: .labelSmallStrong, tone: .primary, lineLimit: 1)
+                    if let description = description {
+                        NuDSText(text: description, variant: .paragraphSmallDefault, tone: .secondary, lineLimit: 2)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                if let secondary = secondaryLabel {
+                    NuDSText(text: secondary, variant: .labelSmallStrong, tone: .primary, lineLimit: 1)
+                }
+                if showChevron {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(NuDS.Color.contentDefault)
+                }
+            }
+            .padding(.horizontal, NuDS.Spacing.s5)
+            .padding(.vertical, NuDS.Spacing.s4)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .buttonStyle(NuDSListRowButtonStyle())
+        .disabled(onPress == nil)
+    }
+}
+
+private struct NuDSListRowButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(
+                RoundedRectangle(cornerRadius: 0)
+                    .fill(configuration.isPressed ? NuDS.Color.surfaceSubtleOnSubtle : NuDS.Color.surfaceDefault)
+            )
+    }
+}
+
+// MARK: - NuDSSectionTitle (espelho SectionTitle — altura 48, labelSmallStrong secondary)
+struct NuDSSectionTitle: View {
+    var title: String
+    var secondary: String? = nil
+    var secondaryTone: NuDSTextTone = .secondary
+    var trailing: (() -> AnyView)? = nil
+    var onSecondaryPress: (() -> Void)? = nil
+    var onTrailingPress: (() -> Void)? = nil
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 0) {
+            NuDSText(text: title, variant: .labelSmallStrong, tone: .secondary, lineLimit: 1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            if let secondary = secondary {
+                if onSecondaryPress != nil {
+                    Button(action: { onSecondaryPress?() }) {
+                        NuDSText(text: secondary, variant: .labelSmallDefault, tone: secondaryTone, lineLimit: 1)
+                    }
+                    .padding(.trailing, trailing != nil ? 0 : NuDS.Spacing.s3)
+                } else {
+                    NuDSText(text: secondary, variant: .labelSmallDefault, tone: secondaryTone, lineLimit: 1)
+                        .padding(.trailing, trailing != nil ? 0 : NuDS.Spacing.s3)
+                }
+            }
+            if let trailing = trailing {
+                Button(action: { onTrailingPress?() }) {
+                    trailing()
+                }
+                .frame(width: 48, height: 48)
+                .contentShape(Rectangle())
+            }
+        }
+        .frame(height: 48)
+        .padding(.leading, NuDS.Spacing.s5)
+        .padding(.trailing, NuDS.Spacing.s2)
     }
 }
 

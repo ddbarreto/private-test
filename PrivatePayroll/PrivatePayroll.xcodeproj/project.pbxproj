@@ -20,6 +20,8 @@
 		A1000000000000000000002E /* ConsignadoTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000002F /* ConsignadoTabView.swift */; };
 		A10000000000000000000030 /* MarketplaceTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000031 /* MarketplaceTabView.swift */; };
 		A10000000000000000000032 /* InvestimentosTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000033 /* InvestimentosTabView.swift */; };
+		A10000000000000000000034 /* AppAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000035 /* AppAnimations.swift */; };
+		A10000000000000000000037 /* NuDSTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000036 /* NuDSTokens.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		A1000000000000000000002F /* ConsignadoTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsignadoTabView.swift; sourceTree = "<group>"; };
 		A10000000000000000000031 /* MarketplaceTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceTabView.swift; sourceTree = "<group>"; };
 		A10000000000000000000033 /* InvestimentosTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestimentosTabView.swift; sourceTree = "<group>"; };
+		A10000000000000000000035 /* AppAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAnimations.swift; sourceTree = "<group>"; };
+		A10000000000000000000036 /* NuDSTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuDSTokens.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,8 @@
 				A1000000000000000000002F /* ConsignadoTabView.swift */,
 				A10000000000000000000031 /* MarketplaceTabView.swift */,
 				A10000000000000000000033 /* InvestimentosTabView.swift */,
+				A10000000000000000000035 /* AppAnimations.swift */,
+				A10000000000000000000036 /* NuDSTokens.swift */,
 				A10000000000000000000006 /* Assets.xcassets */,
 				A1000000000000000000000C /* Info.plist */,
 			);
@@ -165,6 +171,8 @@
 				A1000000000000000000002E /* ConsignadoTabView.swift in Sources */,
 				A10000000000000000000030 /* MarketplaceTabView.swift in Sources */,
 				A10000000000000000000032 /* InvestimentosTabView.swift in Sources */,
+				A10000000000000000000034 /* AppAnimations.swift in Sources */,
+				A10000000000000000000037 /* NuDSTokens.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,6 +16,7 @@ struct InvestimentosTabView: View {
                 productsSection
             }
             .padding(.bottom, 32)
+            .fadeInUp()
         }
         .background(InvestimentosStyle.background)
         .ignoresSafeArea(edges: .top)
@@ -104,25 +105,11 @@ struct InvestimentosTabView: View {
 }
 
 private enum InvestimentosStyle {
-    static let background = SwiftUI.Color(hex: "F5F5F7")
-    static let surface = SwiftUI.Color.white
-    static let textPrimary = SwiftUI.Color(hex: "000000")
-    static let positive = SwiftUI.Color(hex: "34C759")
-    static let divider = SwiftUI.Color(hex: "E5E5EA")
-}
-
-private extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r, g, b: UInt64
-        switch hex.count {
-        case 6: (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        default: (r, g, b) = (0, 0, 0)
-        }
-        self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
-    }
+    static let background = NuDSSemantic.Background.subtle
+    static let surface = NuDSSemantic.Surface.default
+    static let textPrimary = NuDSSemantic.Content.default
+    static let positive = NuDSSemantic.Feedback.success
+    static let divider = NuDSPrimitives.Gray.g20
 }
 
 struct InvestimentosTabView_Previews: PreviewProvider {

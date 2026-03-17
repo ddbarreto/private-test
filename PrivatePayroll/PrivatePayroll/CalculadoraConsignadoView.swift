@@ -110,6 +110,7 @@ struct CalculadoraConsignadoView: View {
             }
             .padding(NuDS.Spacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .screenEnter()
         }
         .background(NuDS.Color.backgroundSecondary)
         .navigationTitle("Calculadora")
